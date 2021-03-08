@@ -11,6 +11,7 @@ export default createGlobalStyle`
   :root {
     --white: #fff;
     --background: #312E38;
+    --header: #4953b8;
     --gray-line: #dcdde0;
     --text: #FFFFFF;
     --text-highlight: #b3b9ff;
@@ -55,5 +56,20 @@ export default createGlobalStyle`
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.7rem;
+    height: 100%;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0.3rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--blue-dark);
+    border-radius: 0.3rem;
   }
 `;
