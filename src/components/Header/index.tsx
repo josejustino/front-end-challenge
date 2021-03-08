@@ -5,7 +5,10 @@ import { Container } from './styles';
 const Header: React.FC = () => {
   return (
     <Container>
-      <div>Cabeçalho</div>
+      <div>
+        <span>ITMovies</span>
+        <span>Filtrar</span>
+      </div>
     </Container>
   );
 };
