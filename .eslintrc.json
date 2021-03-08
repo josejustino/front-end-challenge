@@ -49,7 +49,10 @@
     ],
     "react/react-in-jsx-scope": "off",
     "prettier/prettier": "error",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
+    "react/prop-types": "off"
   },
   "settings": {
     "import/resolver": {
