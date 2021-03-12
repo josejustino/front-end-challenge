@@ -13,7 +13,6 @@ interface PopularMovieProps {
 }
 
 const DataList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
-  console.log(popularMovies);
   return (
     <Container>
       {popularMovies.map(popularMovie => {

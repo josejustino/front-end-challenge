@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import api from '../../services/api';
 
-import { PRIVATE_KEY } from '../../config/index';
+import { API_KEY } from '../../config/index';
 
 import Header from '../../components/Header';
 import DataList from '../../components/DataList';
+import Modal from '../../components/Modal';
 
 import { Container, Main, Content, Section } from './styles';
 
@@ -17,12 +18,13 @@ interface PopularMovie {
 
 const Home: React.FC = () => {
   const [popularMovies, setPopularMovies] = useState<PopularMovie[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     api
       .get(`movie/popular`, {
         params: {
-          api_key: PRIVATE_KEY,
+          api_key: API_KEY,
           language: 'en-US',
           page: 1,
         },
@@ -33,7 +35,8 @@ const Home: React.FC = () => {
         if (status === 200) {
           setPopularMovies(results);
         }
-      });
+      })
+      .catch(error => console.error(error));
   }, []);
 
   return (
@@ -48,6 +51,7 @@ const Home: React.FC = () => {
           </Content>
         </Main>
       </Container>
+      <Modal isModalOpen={isModalOpen} />
     </>
   );
 };

@@ -1,1 +1,1 @@
-export const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+export const API_KEY = process.env.REACT_APP_API_KEY;
