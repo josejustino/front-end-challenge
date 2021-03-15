@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useModalContext } from '../../contexts/ModalContext';
+
+import { API_KEY } from '../../config';
+
+import api from '../../services/api';
 
 import {
   ContainerOverlay,
@@ -9,20 +14,48 @@ import {
   ButtonConfirm,
 } from './styles';
 
+interface GenresProps {
+  id: number;
+  name: string;
+}
+
+interface GenresResponseProps {
+  genres: Array<GenresProps>;
+}
+
 const FiltroModal: React.FC = () => {
+  const [genresList, setGenresList] = useState<Array<GenresProps>>([]);
+
   const { modalState, closeModal } = useModalContext();
-  const { visible, payload } = modalState;
-  console.log(modalState);
+  const { visible } = modalState;
+
+  useEffect(() => {
+    api
+      .get<GenresResponseProps>(`genre/movie/list`, {
+        params: {
+          api_key: API_KEY,
+          language: 'en-US',
+        },
+      })
+      .then(({ status, data }) => {
+        if (status === 200) {
+          const { genres } = data;
+
+          setGenresList(genres);
+        }
+      })
+      .catch(error => console.error(error));
+  }, []);
 
   return (
     <>
       {visible && (
         <ContainerOverlay>
           <ContainerModal>
-            <span className="title">Filtro por Gênero</span>
-            <div className="genders">
-              {payload?.map(gender => (
-                <span>{gender}</span>
+            <span className="title">Filter by Genre</span>
+            <div className="genres">
+              {genresList?.map(genre => (
+                <span key={genre.id}>{genre.name}</span>
               ))}
             </div>
             <ButtonsGroup>

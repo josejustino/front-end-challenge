@@ -5,12 +5,12 @@ import api from '../../services/api';
 import { API_KEY } from '../../config/index';
 
 import Header from '../../components/Header';
+import PopularMovieList from '../../components/PopularMovieList';
 import FiltroModal from '../../components/ModalFilter';
 
 import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
 import { Container, Main, Content, Section } from './styles';
-import PopularMovieList from '../../components/PopularMovieList';
 
 interface PopularMovie {
   id: number;
@@ -28,6 +28,8 @@ const PopularMovies: React.FC = () => {
 
   const scrollObserve = useRef<HTMLDivElement>(null);
   const page = useInfinityScroll(scrollObserve);
+
+  // console.log(scrollObserve);
 
   useEffect(() => {
     // setIsLoading(true);
@@ -59,6 +61,7 @@ const PopularMovies: React.FC = () => {
         <Main>
           <Content>
             <Section>
+              <h1>Popular Movies</h1>
               <PopularMovieList popularMovies={popularMovies} />
             </Section>
             <div ref={scrollObserve} />

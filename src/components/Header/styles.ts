@@ -7,7 +7,7 @@ export const Container = styled.header`
 
   background: var(--header);
 
-  padding: 20px;
+  padding: 1rem;
   position: fixed;
   width: 100%;
 

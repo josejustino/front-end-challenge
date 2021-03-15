@@ -33,7 +33,7 @@ export const ContainerModal = styled.div`
     font-size: 1.5rem;
   }
 
-  & > div.genders {
+  & > div.genres {
     margin-top: 1rem;
     margin-bottom: 1rem;
 
@@ -50,7 +50,7 @@ export const ContainerModal = styled.div`
       padding: 0.5rem;
 
       height: 2rem;
-      margin: 0.25rem;
+      margin: 0.3rem;
       border-radius: 15px;
 
       &:hover {

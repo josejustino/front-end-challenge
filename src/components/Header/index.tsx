@@ -6,26 +6,14 @@ import { Container } from './styles';
 
 const Header: React.FC = () => {
   const { openModal } = useModalContext();
-  const testModal = () =>
-    openModal({
-      payload: [
-        'Ação',
-        'Aventura',
-        'Comédia',
-        'Ficção',
-        'Romance',
-        'Fantasia',
-        'Drama',
-        'Guerra',
-      ],
-    });
+  const testModal = () => openModal();
 
   return (
     <Container>
       <div>
         <span>Movies</span>
         <button type="button" onClick={testModal}>
-          Filtrar
+          Filter
         </button>
       </div>
     </Container>

@@ -11,19 +11,24 @@ export const Main = styled.main`
 
 export const Content = styled.div`
   position: fixed;
-  top: 5rem;
+  top: 4.4rem;
   right: 0;
   bottom: 0;
   overflow-y: auto;
   margin: 0 auto;
   width: 100%;
+
+  & > div {
+    height: 1rem;
+  }
 `;
 
 export const Section = styled.section`
+  margin: 2rem auto;
   width: min(90vw, 1200px);
-  margin: 0 auto;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
