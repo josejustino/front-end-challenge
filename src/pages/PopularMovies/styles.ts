@@ -9,9 +9,9 @@ export const Main = styled.main`
   display: block;
 `;
 
-export const Content = styled.section`
+export const Content = styled.div`
   position: fixed;
-  top: 3.8rem;
+  top: 5rem;
   right: 0;
   bottom: 0;
   overflow-y: auto;

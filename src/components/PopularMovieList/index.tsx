@@ -12,7 +12,7 @@ interface PopularMovieProps {
   popularMovies: Array<MovieProps>;
 }
 
-const DataList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
+const PopularMovieList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
   return (
     <Container>
       {popularMovies.map(popularMovie => {
@@ -31,4 +31,4 @@ const DataList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
   );
 };
 
-export default DataList;
+export default PopularMovieList;

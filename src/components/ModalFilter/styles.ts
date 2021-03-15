@@ -12,11 +12,6 @@ export const ContainerOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  opacity: 1;
-  visibility: visible;
-
-  z-index: 999;
 `;
 
 export const ContainerModal = styled.div`
@@ -28,6 +23,44 @@ export const ContainerModal = styled.div`
 
   position: relative;
   z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  & > span.title {
+    text-align: center;
+
+    font-size: 1.5rem;
+  }
+
+  & > div.genders {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    text-align: center;
+
+    span {
+      cursor: pointer;
+
+      background: var(--white);
+      color: var(--background);
+
+      display: inline-block;
+      line-height: 1rem;
+      padding: 0.5rem;
+
+      height: 2rem;
+      margin: 0.25rem;
+      border-radius: 15px;
+
+      &:hover {
+        background: var(--blue-dark);
+        color: var(--white);
+
+        transition: background-color 0.3s;
+      }
+    }
+  }
 `;
 
 export const ButtonsGroup = styled.div`

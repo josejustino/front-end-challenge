@@ -15,5 +15,15 @@ export const Container = styled.header`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    button {
+      background: var(--white);
+      color: var(--blue-dark);
+
+      border: none;
+      padding: 0.5rem;
+      border-radius: 1rem;
+    }
   }
 `;
