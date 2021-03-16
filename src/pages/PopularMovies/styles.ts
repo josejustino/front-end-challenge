@@ -25,10 +25,5 @@ export const Content = styled.div`
 
 export const Section = styled.section`
   margin: 2rem auto;
-  width: min(90vw, 1200px);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: min(90vw, 1080px);
 `;

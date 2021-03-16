@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { parseISO, format } from 'date-fns';
+// import enUS from 'date-fns/locale/en-US';
 
 import api from '../../services/api';
 
@@ -16,6 +18,8 @@ interface PopularMovie {
   id: number;
   poster_path: string;
   title: string;
+  release_date: string;
+  releaseDateFormatted: string;
 }
 
 interface IPopularMovieResponse {
@@ -29,7 +33,7 @@ const PopularMovies: React.FC = () => {
   const scrollObserve = useRef<HTMLDivElement>(null);
   const page = useInfinityScroll(scrollObserve);
 
-  // console.log(scrollObserve);
+  console.log(popularMovies);
 
   useEffect(() => {
     // setIsLoading(true);
@@ -45,8 +49,21 @@ const PopularMovies: React.FC = () => {
       .then(({ data, status }) => {
         const { results } = data;
 
+        const popularMoviesFormatted = results.map(popularMovie => {
+          return {
+            ...popularMovie,
+            releaseDateFormatted: format(
+              parseISO(popularMovie.release_date),
+              'MMM dd, yyyy',
+            ),
+          };
+        });
+
         if (status === 200) {
-          setPopularMovies(prevMovies => [...prevMovies, ...results]);
+          setPopularMovies(prevMovies => [
+            ...prevMovies,
+            ...popularMoviesFormatted,
+          ]);
 
           // setIsLoading(false);
         }
@@ -61,7 +78,6 @@ const PopularMovies: React.FC = () => {
         <Main>
           <Content>
             <Section>
-              <h1>Popular Movies</h1>
               <PopularMovieList popularMovies={popularMovies} />
             </Section>
             <div ref={scrollObserve} />
