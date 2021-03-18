@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { parseISO, format } from 'date-fns';
-// import enUS from 'date-fns/locale/en-US';
 
 import api from '../../services/api';
 
@@ -32,8 +31,6 @@ const PopularMovies: React.FC = () => {
 
   const scrollObserve = useRef<HTMLDivElement>(null);
   const page = useInfinityScroll(scrollObserve);
-
-  console.log(popularMovies);
 
   useEffect(() => {
     // setIsLoading(true);

@@ -17,6 +17,10 @@ export const Container = styled.header`
     justify-content: space-between;
     align-items: center;
 
+    h1 {
+      font-size: 2rem;
+    }
+
     button {
       background: var(--white);
       color: var(--blue-dark);

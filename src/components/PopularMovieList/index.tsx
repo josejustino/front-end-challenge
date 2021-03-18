@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Container, CardsList, Card } from './styles';
 
@@ -22,14 +23,20 @@ const PopularMovieList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
           return (
             <Card key={popularMovie.id}>
               <div className="card-image">
-                <img
-                  src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2/${popularMovie.poster_path}`}
-                  alt={popularMovie.title}
-                />
+                <Link to={`/movie-details/${popularMovie.id}`}>
+                  <img
+                    src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2/${popularMovie.poster_path}`}
+                    alt={popularMovie.title}
+                  />
+                </Link>
               </div>
               <div className="card-footer">
-                <h3>{popularMovie.title}</h3>
-                <span>{popularMovie.releaseDateFormatted}</span>
+                <h3>
+                  <Link to={`/movie-details/${popularMovie.id}`}>
+                    {popularMovie.title}
+                  </Link>
+                </h3>
+                <p>{popularMovie.releaseDateFormatted}</p>
               </div>
             </Card>
           );

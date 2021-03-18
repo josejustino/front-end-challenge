@@ -1,20 +1,28 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { useModalContext } from '../../contexts/ModalContext';
 
 import { Container } from './styles';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  hasFilter?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ hasFilter = true }) => {
   const { openModal } = useModalContext();
-  const testModal = () => openModal();
 
   return (
     <Container>
       <div>
-        <span>Movies</span>
-        <button type="button" onClick={testModal}>
-          Filter
-        </button>
+        <h1>
+          <Link to="/">Movies</Link>
+        </h1>
+        {hasFilter && (
+          <button type="button" onClick={openModal}>
+            Filter
+          </button>
+        )}
       </div>
     </Container>
   );

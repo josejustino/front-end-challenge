@@ -48,12 +48,20 @@ export const Card = styled.div`
 
     padding: 0.75rem;
 
-    & > h3 {
+    & > h3 > a {
       font-size: 1rem;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--blue);
+        transition: color 0.3s;
+      }
     }
 
-    & > span {
+    & > p {
       margin-top: 0.5rem;
+
+      font-size: 1rem;
     }
   }
 `;
