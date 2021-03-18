@@ -39,7 +39,7 @@ const PopularMovies: React.FC = () => {
       .get<IPopularMovieResponse>(`movie/popular`, {
         params: {
           api_key: API_KEY,
-          language: 'en-US',
+          language: 'pt-BR',
           page,
         },
       })

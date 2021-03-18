@@ -1,6 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div``;
+interface ContainerProps {
+  image: string;
+}
+
+export const Container = styled.div<ContainerProps>`
+  display: flex;
+
+  ${props =>
+    props.image &&
+    css`
+      flex: 1;
+      background-image: url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${props.image}');
+      background-size: cover;
+    `}
+`;
 
 export const Main = styled.main``;
 
