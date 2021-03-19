@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ hasFilter = true }) => {
     <Container>
       <div>
         <h1>
-          <Link to="/">Movies</Link>
+          <Link to="/">JJFilmes</Link>
         </h1>
         {hasFilter && (
           <button type="button" onClick={openModal}>

@@ -17,7 +17,7 @@ interface PopularMovieProps {
 const PopularMovieList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
   return (
     <Container>
-      <h1>Popular Movies</h1>
+      <h1>Filmes Populares</h1>
       <CardsList>
         {popularMovies.map(popularMovie => {
           return (

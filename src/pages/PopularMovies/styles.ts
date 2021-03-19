@@ -11,7 +11,7 @@ export const Main = styled.main`
 
 export const Content = styled.div`
   position: fixed;
-  top: 4.4rem;
+  top: 4.7rem;
   right: 0;
   bottom: 0;
   overflow-y: auto;

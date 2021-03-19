@@ -52,7 +52,7 @@ const FiltroModal: React.FC = () => {
       {visible && (
         <ContainerOverlay>
           <ContainerModal>
-            <span className="title">Filter by Genre</span>
+            <span className="title">Filtro por Gênero</span>
             <div className="genres">
               {genresList?.map(genre => (
                 <span key={genre.id}>{genre.name}</span>
