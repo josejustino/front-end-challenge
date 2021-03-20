@@ -13,7 +13,7 @@ import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
 import { Container, Main, Content, Section } from './styles';
 
-interface PopularMovie {
+interface PopularMovieProps {
   id: number;
   poster_path: string;
   title: string;
@@ -21,12 +21,12 @@ interface PopularMovie {
   releaseDateFormatted: string;
 }
 
-interface IPopularMovieResponse {
-  results: Array<PopularMovie>;
+interface PopularMovieResponse {
+  results: Array<PopularMovieProps>;
 }
 
 const PopularMovies: React.FC = () => {
-  const [popularMovies, setPopularMovies] = useState<PopularMovie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<PopularMovieProps[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
 
   const scrollObserve = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ const PopularMovies: React.FC = () => {
     // setIsLoading(true);
 
     api
-      .get<IPopularMovieResponse>(`movie/popular`, {
+      .get<PopularMovieResponse>(`movie/popular`, {
         params: {
           api_key: API_KEY,
           language: 'pt-BR',
