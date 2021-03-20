@@ -41,12 +41,16 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
-  body, input, text-area, button {
+  body, input, text-area, button, p {
     font: 400 1rem 'Roboto Slab', serif;
   }
 
   h1, h2, h3, h4, h5, h5, h6, strong {
     font-weight: 500;
+  }
+
+  p {
+    font-size: 0.875rem;
   }
 
   button {
