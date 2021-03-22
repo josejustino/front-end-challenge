@@ -57,8 +57,6 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
 
   const { id } = useParams<ParamProps>();
 
-  console.log(movieDetails);
-
   useEffect(() => {
     api
       .get<MovieDetailsProps>(`movie/${id}`, {
@@ -85,6 +83,9 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
           };
           setMovieDetails(movieDetailsFormatted);
         }
+      })
+      .catch(error => {
+        throw new Error(error.message);
       });
   }, [id]);
 
@@ -115,7 +116,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
                   <ImageSection>
                     <img
                       src={`https://www.themoviedb.org/t/p/w400${movieDetails?.poster_path}`}
-                      alt=""
+                      alt={movieDetails.title}
                     />
                   </ImageSection>
 
