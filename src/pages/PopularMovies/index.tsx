@@ -9,7 +9,7 @@ import Header from '../../components/Header';
 import PopularMovieList from '../../components/PopularMovieList';
 import FiltroModal from '../../components/ModalFilter';
 
-import { useInfinityScroll } from '../../hooks/useInfinityScroll';
+import useInfinityScroll from '../../hooks/useInfinityScroll';
 
 import { Container, Main, Content, Section } from './styles';
 
@@ -25,12 +25,12 @@ interface PopularMovieResponse {
   results: Array<PopularMovieProps>;
 }
 
-const PopularMovies: React.FC = () => {
+const PopularMovies: React.FC<PopularMovieProps> = () => {
   const [popularMovies, setPopularMovies] = useState<PopularMovieProps[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
 
-  const scrollObserve = useRef<HTMLDivElement>(null);
-  const page = useInfinityScroll(scrollObserve);
+  const scrollObserve = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const page = useInfinityScroll({ scrollObserve });
 
   useEffect(() => {
     // setIsLoading(true);
@@ -65,7 +65,9 @@ const PopularMovies: React.FC = () => {
           // setIsLoading(false);
         }
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        throw new Error(error.message);
+      });
   }, [page]);
 
   return (
