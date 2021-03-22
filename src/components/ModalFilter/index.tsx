@@ -44,7 +44,9 @@ const FiltroModal: React.FC = () => {
           setGenresList(genres);
         }
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        throw new Error(error.message);
+      });
   }, []);
 
   return (
