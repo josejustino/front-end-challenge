@@ -4,7 +4,9 @@ interface useInfinityScrollProps {
   scrollObserve: React.MutableRefObject<HTMLDivElement>;
 }
 
-function useInfinityScroll({ scrollObserve }: useInfinityScrollProps): number {
+export const useInfinityScroll = ({
+  scrollObserve,
+}: useInfinityScrollProps): number => {
   const [scrollRatio, setScrollRatio] = useState(0);
   const [page, setPage] = useState<number>(0);
 
@@ -25,13 +27,11 @@ function useInfinityScroll({ scrollObserve }: useInfinityScrollProps): number {
 
   useEffect(() => {
     if (scrollRatio > 0) {
-      setPage(p => p + 1);
+      setPage(prevPage => prevPage + 1);
     }
   }, [scrollRatio]);
 
   if (page === 0) return 1;
 
   return page;
-}
-
-export default useInfinityScroll;
+};

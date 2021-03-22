@@ -9,7 +9,7 @@ import Header from '../../components/Header';
 import PopularMovieList from '../../components/PopularMovieList';
 import FiltroModal from '../../components/ModalFilter';
 
-import useInfinityScroll from '../../hooks/useInfinityScroll';
+import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
 import { Container, Main, Content, Section } from './styles';
 
@@ -36,11 +36,12 @@ const PopularMovies: React.FC<PopularMovieProps> = () => {
     // setIsLoading(true);
 
     api
-      .get<PopularMovieResponse>(`movie/popular`, {
+      .get<PopularMovieResponse>(`discover/movie`, {
         params: {
           api_key: API_KEY,
           language: 'pt-BR',
           page,
+          sort_by: 'popularity.desc',
         },
       })
       .then(({ data, status }) => {
