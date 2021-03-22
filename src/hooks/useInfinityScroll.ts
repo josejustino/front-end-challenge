@@ -1,8 +1,10 @@
-import { useEffect, useState, RefObject } from 'react';
+import React, { useEffect, useState } from 'react';
 
-export function useInfinityScroll(
-  scrollObserve: RefObject<any | null>,
-): number {
+interface useInfinityScrollProps {
+  scrollObserve: React.MutableRefObject<HTMLDivElement>;
+}
+
+function useInfinityScroll({ scrollObserve }: useInfinityScrollProps): number {
   const [scrollRatio, setScrollRatio] = useState(0);
   const [page, setPage] = useState<number>(0);
 
@@ -31,3 +33,5 @@ export function useInfinityScroll(
 
   return page;
 }
+
+export default useInfinityScroll;
