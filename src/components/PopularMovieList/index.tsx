@@ -7,10 +7,11 @@ interface MovieProps {
   id: number;
   poster_path: string;
   title: string;
-  releaseDateFormatted: string;
+  release_date: string;
 }
 
 interface PopularMovieProps {
+  loading: boolean;
   popularMovies: Array<MovieProps>;
 }
 
@@ -36,7 +37,7 @@ const PopularMovieList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
                     {popularMovie.title}
                   </Link>
                 </h3>
-                <p>{popularMovie.releaseDateFormatted}</p>
+                <p>{popularMovie.release_date}</p>
               </div>
             </Card>
           );

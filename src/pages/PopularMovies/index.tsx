@@ -1,39 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { parseISO, format } from 'date-fns';
+import { css } from '@emotion/react';
+import { PacmanLoader } from 'react-spinners';
+import { FaFilm } from 'react-icons/fa';
 
 import api from '../../services/api';
 
 import { API_KEY } from '../../config/index';
 
-import Header from '../../components/Header';
+import { Header } from '../../components/Header';
 import PopularMovieList from '../../components/PopularMovieList';
-import FiltroModal from '../../components/ModalFilter';
 
-import { useInfinityScroll } from '../../hooks/useInfinityScroll';
-
-import { Container, Main, Content, Section } from './styles';
+import { Container, Main, Content, Section, Loading } from './styles';
 
 interface PopularMovieProps {
   id: number;
   poster_path: string;
   title: string;
   release_date: string;
-  releaseDateFormatted: string;
 }
 
 interface PopularMovieResponse {
   results: Array<PopularMovieProps>;
+  total_pages: number;
+  total_results: number;
 }
+
+const override = css`
+  display: block;
+  margin: 1rem auto;
+`;
 
 const PopularMovies: React.FC<PopularMovieProps> = () => {
   const [popularMovies, setPopularMovies] = useState<PopularMovieProps[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [totalResults, setTotalResults] = useState(0);
+  const [pageSize] = useState(10);
+  const [pageNumber, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const scrollObserve = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const page = useInfinityScroll({ scrollObserve });
-
-  useEffect(() => {
-    // setIsLoading(true);
+  const handleMovies = useCallback(({ page }) => {
+    setLoading(true);
 
     api
       .get<PopularMovieResponse>(`discover/movie`, {
@@ -44,47 +51,77 @@ const PopularMovies: React.FC<PopularMovieProps> = () => {
           sort_by: 'popularity.desc',
         },
       })
-      .then(({ data, status }) => {
-        const { results } = data;
+      .then(response => {
+        const { status, data } = response;
 
-        const popularMoviesFormatted = results.map(popularMovie => {
+        const popularMoviesFormatted = data?.results?.map(popularMovie => {
           return {
             ...popularMovie,
-            releaseDateFormatted: format(
-              parseISO(popularMovie.release_date),
-              'MMM dd, yyyy',
-            ),
+            release_date: popularMovie.release_date
+              ? format(parseISO(popularMovie.release_date), 'MMM dd, yyyy')
+              : '',
           };
         });
 
         if (status === 200) {
-          setPopularMovies(prevMovies => [
-            ...prevMovies,
-            ...popularMoviesFormatted,
-          ]);
-
-          // setIsLoading(false);
+          setTotalResults(data?.total_results);
+          setPopularMovies(prevMovies =>
+            prevMovies.concat(popularMoviesFormatted),
+          );
+          setLoading(false);
         }
       })
       .catch(error => {
         throw new Error(error.message);
       });
-  }, [page]);
+  }, []);
+
+  const handlePageChange = useCallback(() => {
+    handleMovies({ page: pageNumber + 1 });
+
+    setPage(prevPage => prevPage + 1);
+  }, [handleMovies, pageNumber]);
+
+  const [paginateRef] = useInfiniteScroll({
+    loading,
+    hasNextPage: pageNumber * pageSize < totalResults,
+    onLoadMore: handlePageChange,
+  });
+
+  useEffect(() => {
+    handleMovies({ page: 1 });
+  }, [handleMovies]);
 
   return (
     <>
-      <Header />
+      <Header
+        breadcrumb={[{ title: 'Filmes populares', url: '' }]}
+        breadcrumbIcon={FaFilm}
+      />
       <Container>
         <Main>
-          <Content>
+          <Content id="scrollableDiv">
             <Section>
-              <PopularMovieList popularMovies={popularMovies} />
+              <PopularMovieList
+                popularMovies={popularMovies}
+                loading={loading}
+              />
             </Section>
-            <div ref={scrollObserve} />
+            {pageNumber * pageSize < totalResults && (
+              <div className="loading__more" ref={paginateRef}>
+                <Loading>
+                  <PacmanLoader
+                    loading={loading}
+                    size={15}
+                    color="#FFFFFF"
+                    css={override}
+                  />
+                </Loading>
+              </div>
+            )}
           </Content>
         </Main>
       </Container>
-      <FiltroModal />
     </>
   );
 };

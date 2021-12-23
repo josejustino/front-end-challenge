@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import GlobalStyle from './styles/global';
 
 import Routes from './routes';
-import { ModalProvider } from './contexts/ModalContext';
+import { ModalProvider } from './hooks/useModal';
 
 const App: React.FC = () => (
   <Router>

@@ -10,9 +10,11 @@ interface ModalContextData {
   modalState: ModalState;
 }
 
-const ModalContext = createContext({} as ModalContextData);
+export const ModalContext = createContext<ModalContextData>(
+  {} as ModalContextData,
+);
 
-const ModalProvider: React.FC = ({ children }) => {
+export const ModalProvider: React.FC = ({ children }) => {
   const [modalState, setModalState] = useState<ModalState>({ visible: false });
 
   const openModal = () => setModalState({ visible: true });
@@ -25,10 +27,8 @@ const ModalProvider: React.FC = ({ children }) => {
   );
 };
 
-const useModalContext = (): ModalContextData => {
+export function useModal(): ModalContextData {
   const context = useContext(ModalContext);
 
   return context;
-};
-
-export { useModalContext, ModalProvider };
+}

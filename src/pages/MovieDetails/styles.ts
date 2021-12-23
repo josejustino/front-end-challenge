@@ -117,31 +117,4 @@ export const ContentSection = styled.section`
   p.abstract {
     margin-top: 0.75rem;
   }
-
-  & > div.authors {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-
-    margin-top: 1.5rem;
-
-    ol {
-      list-style: none;
-
-      width: 33%;
-
-      li + li {
-        margin-top: 1.5rem;
-      }
-
-      li {
-        width: 100%;
-        padding-right: 1.5rem;
-
-        p:last-child {
-          font-size: 0.75rem;
-        }
-      }
-    }
-  }
 `;

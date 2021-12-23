@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useModalContext } from '../../contexts/ModalContext';
+import { useModal } from '../../hooks/useModal';
 
 import { API_KEY } from '../../config';
 
@@ -26,7 +26,7 @@ interface GenresResponseProps {
 const FiltroModal: React.FC = () => {
   const [genresList, setGenresList] = useState<Array<GenresProps>>([]);
 
-  const { modalState, closeModal } = useModalContext();
+  const { modalState, closeModal } = useModal();
   const { visible } = modalState;
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const FiltroModal: React.FC = () => {
       .get<GenresResponseProps>(`genre/movie/list`, {
         params: {
           api_key: API_KEY,
-          language: 'en-US',
+          language: 'pt-BR',
         },
       })
       .then(({ status, data }) => {

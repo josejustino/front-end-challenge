@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { parseISO, format, intervalToDuration, subMinutes } from 'date-fns';
+import { FaFolderOpen } from 'react-icons/fa';
 
-import Header from '../../components/Header';
+import { Header } from '../../components/Header';
+import { Loading } from '../../components/Loading';
 
 import api from '../../services/api';
 
@@ -28,13 +30,9 @@ interface MovieDetailsProps {
   title: string;
   overview: string;
   release_date: string;
-  releaseDateFormatted: string;
-  releaseYear: string;
+  release_year: string;
   runtime: number;
-  duration: {
-    hours?: number;
-    minutes?: number;
-  };
+  duration: string;
   genres: Array<{ id: number; name: string }>;
   genresNamesList: string;
   production_countries: Array<{ iso_3166_1: string; name: string }>;
@@ -43,177 +41,123 @@ interface MovieDetailsProps {
   poster_path: string;
 }
 
-// interface MovieCreditsProps {
-//   crew: Array<MovieDetailsResponse>;
-// }
-
 const MovieDetails: React.FC<MovieDetailsProps> = () => {
+  const [loading, setLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState<MovieDetailsProps>(
     {} as MovieDetailsProps,
   );
-  // const [movieCredits, setMovieCredits] = useState<MovieCreditsProps>(
-  //   {} as MovieCreditsProps,
-  // );
 
   const { id } = useParams<ParamProps>();
 
-  useEffect(() => {
-    api
-      .get<MovieDetailsProps>(`movie/${id}`, {
-        params: {
-          api_key: API_KEY,
-          language: 'pt-BR',
-        },
-      })
-      .then(({ status, data }) => {
-        if (status === 200) {
-          const movieDetailsFormatted = {
-            ...data,
-            releaseYear: format(parseISO(data.release_date), 'yyyy'),
-            releaseDateFormatted: format(
-              parseISO(data.release_date),
-              'dd/MM/yyyy',
-            ),
-            duration: intervalToDuration({
-              start: subMinutes(Date.now(), data.runtime),
-              end: Date.now(),
-            }),
-            genresNamesList: data.genres.map(genre => genre.name).join(', '),
-            country: data.production_countries[0]?.iso_3166_1,
-          };
-          setMovieDetails(movieDetailsFormatted);
-        }
-      })
-      .catch(error => {
-        throw new Error(error.message);
-      });
-  }, [id]);
+  const movieDurationFormatted = useCallback((runtime: number) => {
+    const duration = intervalToDuration({
+      start: subMinutes(Date.now(), runtime),
+      end: Date.now(),
+    });
 
-  // useEffect(() => {
-  //   api
-  //     .get(`movie/${id}/credits`, {
-  //       params: {
-  //         api_key: API_KEY,
-  //         language: 'pt-BR',
-  //       },
-  //     })
-  //     .then(({ status, data }) => {
-  //       if (status === 200) {
-  //         setMovieCredits(data);
-  //       }
-  //     });
-  // }, [id]);
+    if (duration.hours === 0) {
+      return `${duration.minutes}m`;
+    }
+
+    if (duration.minutes === 0) {
+      return `${duration.hours}h`;
+    }
+
+    return `${duration.hours}h ${duration.minutes}m`;
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+
+    setTimeout(() => {
+      api
+        .get<MovieDetailsProps>(`movie/${id}`, {
+          params: {
+            api_key: API_KEY,
+            language: 'pt-BR',
+          },
+        })
+        .then(({ status, data }) => {
+          if (status === 200) {
+            setMovieDetails({
+              ...data,
+              release_year: format(parseISO(data.release_date), 'yyyy'),
+              release_date: format(parseISO(data.release_date), 'dd/MM/yyyy'),
+              duration: movieDurationFormatted(data.runtime),
+              genresNamesList: data.genres.map(genre => genre.name).join(', '),
+              country: data.production_countries[0]?.iso_3166_1,
+            });
+            setLoading(false);
+          }
+        })
+        .catch(error => {
+          setLoading(false);
+          throw new Error(error.message);
+        });
+    }, 500);
+  }, [id, movieDurationFormatted]);
+
+  const setMovieImage = useMemo(() => {
+    if (!movieDetails?.poster_path) return '';
+
+    return `https://www.themoviedb.org/t/p/w400${movieDetails?.poster_path}`;
+  }, [movieDetails?.poster_path]);
 
   return (
     <>
-      <Header hasFilter={false} />
-      <Container>
-        <Main>
-          <Content>
-            <ContentBackground image={movieDetails.backdrop_path}>
-              <ContainerInfo>
-                <ContainerSections>
-                  <ImageSection>
-                    <img
-                      src={`https://www.themoviedb.org/t/p/w400${movieDetails?.poster_path}`}
-                      alt={movieDetails.title}
-                    />
-                  </ImageSection>
+      <Loading loading={loading} iconSize="30" />
 
-                  <ContentSection>
-                    <h2>
-                      {movieDetails.title} ({movieDetails?.releaseYear})
-                    </h2>
-                    <p className="quick-info">
-                      <span>
-                        {movieDetails.releaseDateFormatted}
-                        {'  '}
-                        {`(${movieDetails?.country})`}
-                      </span>
-                      <span className="genres">
-                        {movieDetails.genresNamesList}
-                      </span>
-                      <span className="duration">
-                        {`${movieDetails.duration?.hours}h
-                        ${movieDetails.duration?.minutes}m`}
-                      </span>
-                    </p>
-                    <div className="user-score">
-                      <span>User Score</span>
-                    </div>
-                    <h3>Overview</h3>
-                    <p className="abstract">{movieDetails.overview}</p>
-                    {/* <div className="authors">
-                      <ol>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                      </ol>
+      <Header
+        breadcrumb={[
+          { title: 'Filmes populares', url: '/' },
+          { title: 'Detalhes do filme', url: '' },
+        ]}
+        breadcrumbIcon={FaFolderOpen}
+      />
 
-                      <ol>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                      </ol>
+      {!loading && (
+        <Container>
+          <Main>
+            <Content>
+              <ContentBackground image={movieDetails.backdrop_path}>
+                <ContainerInfo>
+                  <ContainerSections>
+                    <ImageSection>
+                      <img src={setMovieImage} alt={movieDetails?.title} />
+                    </ImageSection>
 
-                      <ol>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                        <li>
-                          <p>
-                            <strong>Kiel Murray</strong>
-                          </p>
-                          <p>Story</p>
-                        </li>
-                      </ol>
-                    </div> */}
-                  </ContentSection>
-                </ContainerSections>
-              </ContainerInfo>
-            </ContentBackground>
-          </Content>
-        </Main>
-      </Container>
+                    <ContentSection>
+                      <h2>
+                        {movieDetails?.title} ({movieDetails?.release_year})
+                      </h2>
+                      <p className="quick-info">
+                        <span>
+                          {movieDetails?.release_date}
+                          {'  '}
+                          {movieDetails?.country
+                            ? `(${movieDetails?.country})`
+                            : ''}
+                        </span>
+                        <span className="genres">
+                          {movieDetails?.genresNamesList}
+                        </span>
+                        <span className="duration">
+                          {movieDetails?.duration ?? 'ND'}
+                        </span>
+                      </p>
+                      <div className="user-score">
+                        <span>User Score</span>
+                      </div>
+                      <h3>Overview</h3>
+                      <p className="abstract">{movieDetails?.overview}</p>
+                    </ContentSection>
+                  </ContainerSections>
+                </ContainerInfo>
+              </ContentBackground>
+            </Content>
+          </Main>
+        </Container>
+      )}
     </>
   );
 };
