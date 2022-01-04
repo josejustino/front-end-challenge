@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import PopularMovies from '../pages/PopularMovies';
+import { PopularMovies } from '../pages/PopularMovies';
 import MovieDetails from '../pages/MovieDetails';
 
 const Routes: React.FC = () => (

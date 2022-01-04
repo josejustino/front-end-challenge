@@ -19,17 +19,8 @@ export const Content = styled.div`
   height: 100%;
   padding: 0;
   padding-left: 0;
-  padding-right: 11px;
+  padding-right: 0;
   position: relative;
-
-  .ant-drawer-mask {
-    right: 0;
-  }
-
-  .ant-drawer-content-wrapper {
-    right: 0;
-    left: 56px;
-  }
 `;
 
 export const Breadcrumb = styled.div`
@@ -44,12 +35,6 @@ export const Breadcrumb = styled.div`
     &:not(:first-child) {
       svg {
         fill: #d6d6d6;
-      }
-    }
-
-    &:first-child {
-      svg {
-        margin-top: -5px;
       }
     }
 

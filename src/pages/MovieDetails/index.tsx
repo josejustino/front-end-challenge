@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { parseISO, format, intervalToDuration, subMinutes } from 'date-fns';
-import { FaFolderOpen } from 'react-icons/fa';
+import { FaFilm } from 'react-icons/fa';
+import Rating from 'react-rating';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
 import { Header } from '../../components/Header';
 import { Loading } from '../../components/Loading';
@@ -21,7 +23,7 @@ import {
   ContentSection,
 } from './styles';
 
-interface ParamProps {
+interface ParamsProps {
   id: string;
 }
 
@@ -47,7 +49,8 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
     {} as MovieDetailsProps,
   );
 
-  const { id } = useParams<ParamProps>();
+  const { id } = useParams<ParamsProps>();
+  const history = useHistory();
 
   const movieDurationFormatted = useCallback((runtime: number) => {
     const duration = intervalToDuration({
@@ -81,11 +84,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
           if (status === 200) {
             setMovieDetails({
               ...data,
-              release_year: format(parseISO(data.release_date), 'yyyy'),
-              release_date: format(parseISO(data.release_date), 'dd/MM/yyyy'),
-              duration: movieDurationFormatted(data.runtime),
-              genresNamesList: data.genres.map(genre => genre.name).join(', '),
-              country: data.production_countries[0]?.iso_3166_1,
+              release_year: format(parseISO(data?.release_date), 'yyyy'),
+              release_date: format(parseISO(data?.release_date), 'dd/MM/yyyy'),
+              duration: movieDurationFormatted(data?.runtime),
+              genresNamesList: data?.genres
+                .map(genre => genre?.name)
+                .join(', '),
+              country: data?.production_countries[0]?.iso_3166_1,
             });
             setLoading(false);
           }
@@ -108,11 +113,18 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
       <Loading loading={loading} iconSize="30" />
 
       <Header
+        breadcrumbIcon={FaFilm}
         breadcrumb={[
           { title: 'Filmes populares', url: '/' },
-          { title: 'Detalhes do filme', url: '' },
+          { title: movieDetails?.title },
         ]}
-        breadcrumbIcon={FaFolderOpen}
+        buttons={[
+          {
+            content: 'Voltar',
+            marginLess: true,
+            onClick: () => history.push('/'),
+          },
+        ]}
       />
 
       {!loading && (
@@ -146,9 +158,20 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
                         </span>
                       </p>
                       <div className="user-score">
-                        <span>User Score</span>
+                        <span className="user-score__title">
+                          Classificação do usuário:
+                        </span>
+                        <Rating
+                          start={0}
+                          stop={5}
+                          fractions={1}
+                          readonly
+                          initialRating={3.4}
+                          fullSymbol={<FaStar />}
+                          emptySymbol={<FaRegStar />}
+                        />
                       </div>
-                      <h3>Overview</h3>
+                      <h3>Resumo</h3>
                       <p className="abstract">{movieDetails?.overview}</p>
                     </ContentSection>
                   </ContainerSections>

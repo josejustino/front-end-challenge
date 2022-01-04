@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { parseISO, format } from 'date-fns';
 import { css } from '@emotion/react';
@@ -7,12 +8,21 @@ import { FaFilm } from 'react-icons/fa';
 
 import api from '../../services/api';
 
-import { API_KEY } from '../../config/index';
-
 import { Header } from '../../components/Header';
-import PopularMovieList from '../../components/PopularMovieList';
+import { PopularMovieList } from '../../components/PopularMovieList';
+import { Button } from '../../components/Button';
+import { Genres } from './components/Filters/Genres';
 
-import { Container, Main, Content, Section, Loading } from './styles';
+import {
+  Container,
+  Main,
+  Content,
+  Section,
+  Loading,
+  FilterFormContainer,
+  FilterFormContent,
+  ButtonsFilter,
+} from './styles';
 
 interface PopularMovieProps {
   id: number;
@@ -27,54 +37,76 @@ interface PopularMovieResponse {
   total_results: number;
 }
 
+interface HeaderProps {
+  closeFilter: () => void;
+}
+
+interface FormProps {
+  genres: Array<string>;
+}
+
 const override = css`
   display: block;
   margin: 1rem auto;
 `;
 
-const PopularMovies: React.FC<PopularMovieProps> = () => {
+export const PopularMovies: React.FC<PopularMovieProps> = () => {
+  const headerRef = useRef<HeaderProps>(null);
+
+  const [loading, setLoading] = useState(false);
+
   const [popularMovies, setPopularMovies] = useState<PopularMovieProps[]>([]);
   const [totalResults, setTotalResults] = useState(0);
   const [pageSize] = useState(10);
   const [pageNumber, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState({
+    genres: '',
+  });
 
-  const handleMovies = useCallback(({ page }) => {
-    setLoading(true);
+  const { control, handleSubmit, setValue } = useForm<FormProps>({
+    defaultValues: {
+      genres: [],
+    },
+  });
 
-    api
-      .get<PopularMovieResponse>(`discover/movie`, {
-        params: {
-          api_key: API_KEY,
-          language: 'pt-BR',
-          page,
-          sort_by: 'popularity.desc',
-        },
-      })
-      .then(response => {
-        const { status, data } = response;
+  const handleMovies = useCallback(
+    ({ page }) => {
+      setLoading(true);
 
-        const popularMoviesFormatted = data?.results?.map(popularMovie => {
-          return {
-            ...popularMovie,
-            release_date: popularMovie.release_date
-              ? format(parseISO(popularMovie.release_date), 'MMM dd, yyyy')
-              : '',
-          };
+      api
+        .get<PopularMovieResponse>(`discover/movie`, {
+          params: {
+            page,
+            with_genres: filters?.genres,
+            sort_by: 'popularity.desc',
+          },
+        })
+        .then(response => {
+          const { status, data } = response;
+
+          const popularMoviesFormatted = data?.results?.map(popularMovie => {
+            return {
+              ...popularMovie,
+              release_date: popularMovie.release_date
+                ? format(parseISO(popularMovie.release_date), 'MMM dd, yyyy')
+                : '',
+            };
+          });
+
+          if (status === 200) {
+            setTotalResults(data?.total_results);
+            setPopularMovies(prevMovies =>
+              prevMovies.concat(popularMoviesFormatted),
+            );
+            setLoading(false);
+          }
+        })
+        .catch(error => {
+          throw new Error(error.message);
         });
-
-        if (status === 200) {
-          setTotalResults(data?.total_results);
-          setPopularMovies(prevMovies =>
-            prevMovies.concat(popularMoviesFormatted),
-          );
-          setLoading(false);
-        }
-      })
-      .catch(error => {
-        throw new Error(error.message);
-      });
-  }, []);
+    },
+    [filters],
+  );
 
   const handlePageChange = useCallback(() => {
     handleMovies({ page: pageNumber + 1 });
@@ -92,12 +124,55 @@ const PopularMovies: React.FC<PopularMovieProps> = () => {
     handleMovies({ page: 1 });
   }, [handleMovies]);
 
+  const handleClearFilters = useCallback(() => {
+    setValue('genres', []);
+
+    headerRef?.current?.closeFilter();
+  }, [setValue]);
+
+  const onSubmit = async (data: FormProps) => {
+    const formatGenres = data?.genres?.join(',');
+
+    setPopularMovies([]);
+    setFilters({ genres: formatGenres });
+  };
+
   return (
     <>
       <Header
-        breadcrumb={[{ title: 'Filmes populares', url: '' }]}
+        ref={headerRef}
+        breadcrumb={[{ title: 'Filmes populares' }]}
         breadcrumbIcon={FaFilm}
-      />
+        drawerProps={{ height: 'auto' }}
+      >
+        <FilterFormContainer onSubmit={handleSubmit(onSubmit)}>
+          <FilterFormContent />
+          <Genres control={control} />
+          <FilterFormContent />
+          <ButtonsFilter>
+            <Button
+              content="Limpar Filtros"
+              marginLess
+              type="submit"
+              onClick={handleClearFilters}
+            />
+            <Button
+              content="Cancelar"
+              onClick={e => {
+                e.preventDefault();
+                headerRef.current?.closeFilter();
+              }}
+            />
+            <Button
+              content="Aplicar"
+              marginLess
+              type="submit"
+              color="#4953b8"
+              onClick={headerRef.current?.closeFilter}
+            />
+          </ButtonsFilter>
+        </FilterFormContainer>
+      </Header>
       <Container>
         <Main>
           <Content id="scrollableDiv">
@@ -125,5 +200,3 @@ const PopularMovies: React.FC<PopularMovieProps> = () => {
     </>
   );
 };
-
-export default PopularMovies;

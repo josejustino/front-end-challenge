@@ -41,3 +41,20 @@ export const Loading = styled.div`
     color: var(--blue-dark);
   }
 `;
+
+export const FilterFormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const FilterFormContent = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+export const ButtonsFilter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  margin-top: 16px;
+`;

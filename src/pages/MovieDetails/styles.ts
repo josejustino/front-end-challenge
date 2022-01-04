@@ -108,6 +108,19 @@ export const ContentSection = styled.section`
 
   & > div.user-score {
     margin-top: 1rem;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span.user-score__title {
+      margin-right: 0.3rem;
+    }
+
+    svg {
+      margin-top: 0.2rem;
+      margin-left: 0.2rem;
+    }
   }
 
   h3 {

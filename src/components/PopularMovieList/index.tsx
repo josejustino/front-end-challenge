@@ -15,7 +15,9 @@ interface PopularMovieProps {
   popularMovies: Array<MovieProps>;
 }
 
-const PopularMovieList: React.FC<PopularMovieProps> = ({ popularMovies }) => {
+export const PopularMovieList: React.FC<PopularMovieProps> = ({
+  popularMovies,
+}) => {
   return (
     <Container>
       <h1>Filmes Populares</h1>

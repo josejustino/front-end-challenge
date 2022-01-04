@@ -51,6 +51,7 @@ export const Card = styled.div`
     & > h3 > a {
       font-size: 1rem;
       cursor: pointer;
+      color: #fff;
 
       &:hover {
         color: var(--blue);

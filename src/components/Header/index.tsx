@@ -3,27 +3,35 @@ import React, {
   useImperativeHandle,
   useState,
   ForwardRefRenderFunction,
+  ReactNode,
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Drawer, Button } from 'antd';
+import { Drawer } from 'antd';
 import { IconBaseProps } from 'react-icons';
 import { FaChevronRight } from 'react-icons/fa';
 
 import { Container, Content, Breadcrumb, HeaderButtons } from './styles';
+import { Button } from '../Button';
 // import { SearchFilter } from '../SearchFilter';
 
-interface Breadcrumb {
+interface BreadcrumbProps {
   title: string;
-  url: string;
+  url?: string;
 }
 
-type HeaderProps = {
-  breadcrumb: Array<Breadcrumb>;
+interface HeaderProps {
+  breadcrumb: Array<BreadcrumbProps>;
   breadcrumbIcon: React.ComponentType<IconBaseProps>;
-  buttons?: Array<object>;
+  buttons?: Array<{
+    content: string;
+    marginLess?: boolean;
+    color?: string;
+    onClick?: () => void;
+  }>;
   drawerProps?: object;
   onSearch?: (value: string) => void;
-};
+  children?: ReactNode;
+}
 
 const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
   {
@@ -52,7 +60,7 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
     onSearch(value);
   };
 
-  const handleNavigate = (url: string) => {
+  const handleNavigate = (url?: string) => {
     if (!url) return;
 
     history.push(url);
@@ -106,20 +114,18 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
             />
           )} */}
 
-          {/* {children && (
+          {children && (
             <Button
               content="Filtrar"
-              icon="filter"
-              size="small"
-              labelPosition="left"
-              color="green"
+              size="middle"
+              marginLess
               onClick={openFilter}
             />
           )}
 
           {buttons?.map(buttonProps => {
             return <Button key={buttonProps?.content} {...buttonProps} />;
-          })} */}
+          })}
         </HeaderButtons>
 
         {children && (
@@ -128,7 +134,7 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
             closable={false}
             visible={showFilters}
             getContainer={false}
-            style={{ position: 'absolute' }}
+            bodyStyle={{ background: '#37343c' }}
             {...drawerProps}
           >
             {children}
