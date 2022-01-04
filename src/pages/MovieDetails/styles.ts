@@ -29,7 +29,7 @@ export const ContentBackground = styled.div<ContentProps>`
   ${props =>
     props.image &&
     css`
-      background-image: url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${props.image}');
+      background-image: url(${props.image});
       background-size: cover;
       background-position: right -20rem top;
     `}

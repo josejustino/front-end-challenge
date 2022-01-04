@@ -7,6 +7,7 @@ import { FaRegStar, FaStar } from 'react-icons/fa';
 
 import { Header } from '../../components/Header';
 import { Loading } from '../../components/Loading';
+import { MovieImage, movieImageSrc } from '../../components/MovieImage';
 
 import api from '../../services/api';
 
@@ -41,9 +42,10 @@ interface MovieDetailsProps {
   country: string;
   backdrop_path: string;
   poster_path: string;
+  vote_average: number;
 }
 
-const MovieDetails: React.FC<MovieDetailsProps> = () => {
+export const MovieDetails: React.FC<MovieDetailsProps> = () => {
   const [loading, setLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState<MovieDetailsProps>(
     {} as MovieDetailsProps,
@@ -72,41 +74,39 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
   useEffect(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      api
-        .get<MovieDetailsProps>(`movie/${id}`, {
-          params: {
-            api_key: API_KEY,
-            language: 'pt-BR',
-          },
-        })
-        .then(({ status, data }) => {
-          if (status === 200) {
-            setMovieDetails({
-              ...data,
-              release_year: format(parseISO(data?.release_date), 'yyyy'),
-              release_date: format(parseISO(data?.release_date), 'dd/MM/yyyy'),
-              duration: movieDurationFormatted(data?.runtime),
-              genresNamesList: data?.genres
-                .map(genre => genre?.name)
-                .join(', '),
-              country: data?.production_countries[0]?.iso_3166_1,
-            });
-            setLoading(false);
-          }
-        })
-        .catch(error => {
+    api
+      .get<MovieDetailsProps>(`movie/${id}`, {
+        params: {
+          api_key: API_KEY,
+          language: 'pt-BR',
+        },
+      })
+      .then(({ status, data }) => {
+        if (status === 200) {
+          setMovieDetails({
+            ...data,
+            release_year: format(parseISO(data?.release_date), 'yyyy'),
+            release_date: format(parseISO(data?.release_date), 'dd/MM/yyyy'),
+            duration: movieDurationFormatted(data?.runtime),
+            genresNamesList: data?.genres.map(genre => genre?.name).join(', '),
+            country: data?.production_countries[0]?.iso_3166_1,
+          });
           setLoading(false);
-          throw new Error(error.message);
-        });
-    }, 500);
+        }
+      })
+      .catch(error => {
+        setLoading(false);
+        throw new Error(error.message);
+      });
   }, [id, movieDurationFormatted]);
 
-  const setMovieImage = useMemo(() => {
-    if (!movieDetails?.poster_path) return '';
+  const setRating = useMemo(() => {
+    const result = (movieDetails?.vote_average * 5) / 10;
 
-    return `https://www.themoviedb.org/t/p/w400${movieDetails?.poster_path}`;
-  }, [movieDetails?.poster_path]);
+    if (result < 0) return 0;
+
+    return result;
+  }, [movieDetails?.vote_average]);
 
   return (
     <>
@@ -116,7 +116,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
         breadcrumbIcon={FaFilm}
         breadcrumb={[
           { title: 'Filmes populares', url: '/' },
-          { title: movieDetails?.title },
+          { title: movieDetails?.title ?? '... Carregando' },
         ]}
         buttons={[
           {
@@ -131,11 +131,21 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
         <Container>
           <Main>
             <Content>
-              <ContentBackground image={movieDetails.backdrop_path}>
+              <ContentBackground
+                image={movieImageSrc(
+                  movieDetails.backdrop_path,
+                  'w1920_and_h800_multi_faces',
+                  movieDetails?.poster_path,
+                )}
+              >
                 <ContainerInfo>
                   <ContainerSections>
                     <ImageSection>
-                      <img src={setMovieImage} alt={movieDetails?.title} />
+                      <MovieImage
+                        name={movieDetails?.title}
+                        path={movieDetails?.poster_path}
+                        size="w400"
+                      />
                     </ImageSection>
 
                     <ContentSection>
@@ -158,15 +168,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
                         </span>
                       </p>
                       <div className="user-score">
-                        <span className="user-score__title">
-                          Classificação do usuário:
-                        </span>
+                        <span className="user-score__title">Avaliação:</span>
                         <Rating
                           start={0}
                           stop={5}
-                          fractions={1}
+                          fractions={2}
                           readonly
-                          initialRating={3.4}
+                          initialRating={setRating}
                           fullSymbol={<FaStar />}
                           emptySymbol={<FaRegStar />}
                         />
@@ -184,5 +192,3 @@ const MovieDetails: React.FC<MovieDetailsProps> = () => {
     </>
   );
 };
-
-export default MovieDetails;
