@@ -12,9 +12,9 @@
 
 
 <p align="center" >
-  <a href="#fire-prévia-da-aplicação"> :fire: Prévia da Aplicação</a>&nbsp;|
-  <a href="#rocket-tecnologias-usadas"> :rocket: Tecnologias Usadas</a>&nbsp;|
-  <a href="#thinking-como-contribuir?"> :thinking: Como Contribuir?</a>&nbsp;|
+  <a href="#fire-prévia-da-aplicação"> :fire: Prévia da Aplicação</a> |
+  <a href="#rocket-tecnologias-usadas"> :rocket: Tecnologias Usadas</a> |
+  <a href="#thinking-como-contribuir?"> :thinking: Como Contribuir?</a> |
   <a href="#zap-executando-o-projeto"> :zap: Executando o Projeto </a>
 </p>
 
