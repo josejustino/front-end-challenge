@@ -26,6 +26,7 @@
   ],
   "rules": {
     "import/no-duplicates": "off",
+    "react/function-component-definition": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
