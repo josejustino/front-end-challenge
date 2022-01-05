@@ -10,17 +10,16 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   content: string;
   size?: 'small' | 'middle' | 'large';
   containerStyle?: object;
-  key?: string | number;
 };
 
 export const Button: React.FC<ButtonProps> = ({
-  loading = false,
-  type = 'button',
-  marginLess = false,
+  loading,
+  type,
+  marginLess,
   content,
   containerStyle,
   ...props
-}) => {
+}): JSX.Element => {
   const { color } = props;
 
   const style = {
@@ -37,4 +36,12 @@ export const Button: React.FC<ButtonProps> = ({
       </AntButton>
     </Container>
   );
+};
+
+Button.defaultProps = {
+  loading: false,
+  type: 'button',
+  marginLess: false,
+  size: 'middle',
+  containerStyle: {},
 };
