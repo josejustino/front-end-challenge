@@ -12,7 +12,6 @@ import { FaChevronRight } from 'react-icons/fa';
 
 import { Container, Content, Breadcrumb, HeaderButtons } from './styles';
 import { Button } from '../Button';
-// import { SearchFilter } from '../SearchFilter';
 
 interface BreadcrumbProps {
   title: string;
@@ -34,14 +33,7 @@ interface HeaderProps {
 }
 
 const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
-  {
-    breadcrumb,
-    breadcrumbIcon,
-    buttons,
-    onSearch = value => value,
-    drawerProps,
-    children,
-  },
+  { breadcrumb, breadcrumbIcon, buttons, onSearch, drawerProps, children },
   ref,
 ) => {
   const history = useHistory();
@@ -57,7 +49,7 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
   };
 
   const searchFilter = (value: string) => {
-    onSearch(value);
+    if (onSearch) onSearch(value);
   };
 
   const handleNavigate = (url?: string) => {
@@ -105,15 +97,6 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
         <Breadcrumbs />
 
         <HeaderButtons>
-          {/* {onSearch && (
-            <SearchFilter
-              width="256px"
-              name="search"
-              placeholder="Digite e aperte Enter"
-              onSearch={searchFilter}
-            />
-          )} */}
-
           {children && (
             <Button
               content="Filtrar"

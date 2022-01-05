@@ -71,9 +71,4 @@ export const HeaderButtons = styled.div`
     height: 33px;
     width: 256px;
   }
-
-  button {
-    margin-left: 8px !important;
-    margin-right: 0 !important;
-  }
 `;

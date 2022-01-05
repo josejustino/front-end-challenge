@@ -144,6 +144,7 @@ export const MovieDetails: React.FC<MovieDetailsProps> = () => {
                       <MovieImage
                         name={movieDetails?.title}
                         path={movieDetails?.poster_path}
+                        pathFallback={movieDetails.backdrop_path}
                         size="w400"
                       />
                     </ImageSection>

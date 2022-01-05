@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { parseISO, format } from 'date-fns';
 import { css } from '@emotion/react';
@@ -134,7 +134,7 @@ export const PopularMovies: React.FC<PopularMovieProps> = () => {
     const formatGenres = data?.genres?.join(',');
 
     setPopularMovies([]);
-    setFilters({ genres: formatGenres });
+    setFilters({ ...filters, genres: formatGenres });
   };
 
   return (

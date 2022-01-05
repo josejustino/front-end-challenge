@@ -27,6 +27,7 @@
   "rules": {
     "import/no-duplicates": "off",
     "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     "jsx-a11y/click-events-have-key-events": "off",
