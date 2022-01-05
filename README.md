@@ -35,9 +35,9 @@ Aplicação criada para listar filmes populares utilizando a api do themoviedb.
 O projeto foi feito com as seguintes tecnologias:
 
 - [ReactJS](https://pt-br.reactjs.org/)
-- [Ant-Design](https://ant.design/)
-- [React-Hook-Form](https://react-hook-form.com/)
-- [Styled-Components](https://styled-components.com/)
+- [Ant Design](https://ant.design/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Styled Components](https://styled-components.com/)
 {...}
 
 ## :thinking: Como Contribuir?
