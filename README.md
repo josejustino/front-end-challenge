@@ -27,7 +27,7 @@ Aplicação criada para listar filmes populares utilizando a api do themoviedb.
 ## :fire: Prévia da Aplicação
 
 <div align="center">
-<img src="" alt="preview"/>
+<img src="https://media.giphy.com/media/naYGCP8Tn1xpIJ6z17/giphy.gif" alt="preview"/>
 </div>
 
 ### :rocket: Tecnologias Usadas
