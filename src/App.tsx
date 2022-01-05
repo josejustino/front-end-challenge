@@ -1,19 +1,17 @@
-import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 import GlobalStyle from './styles/global';
 
 import Routes from './routes';
-import { ModalProvider } from './hooks/useModal';
 
-const App: React.FC = () => (
-  <Router>
-    <ModalProvider>
+const App: React.FC = (): JSX.Element => {
+  return (
+    <Router>
       <Routes />
-    </ModalProvider>
-    <GlobalStyle />
-  </Router>
-);
+      <GlobalStyle />
+    </Router>
+  );
+};
 
 export default App;
