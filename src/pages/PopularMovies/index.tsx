@@ -9,7 +9,7 @@ import { FaFilm } from 'react-icons/fa';
 import api from '../../services/api';
 
 import { Header } from '../../components/Header';
-import { PopularMovieList } from '../../components/PopularMovieList';
+import { PopularMovieList } from './components/PopularMovieList';
 import { Button } from '../../components/Button';
 import { Genres } from './components/Filters/Genres';
 
