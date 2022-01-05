@@ -5,13 +5,13 @@ import GlobalStyle from './styles/global';
 
 import Routes from './routes';
 
-const App: React.FC = (): JSX.Element => {
+function App(): JSX.Element {
   return (
     <Router>
       <Routes />
       <GlobalStyle />
     </Router>
   );
-};
+}
 
 export default App;
