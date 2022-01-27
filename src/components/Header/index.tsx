@@ -4,6 +4,7 @@ import React, {
   useState,
   ForwardRefRenderFunction,
   ReactNode,
+  useCallback,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Drawer } from 'antd';
@@ -52,39 +53,45 @@ const HeaderComponent: ForwardRefRenderFunction<{}, HeaderProps> = (
     if (onSearch) onSearch(value);
   };
 
-  const handleNavigate = (url?: string) => {
-    if (!url) return;
+  const handleNavigate = useCallback(
+    (url?: string) => {
+      if (!url) return;
 
-    history.push(url);
-  };
+      history.push(url);
+    },
+    [history],
+  );
 
-  const Breadcrumbs = () => (
-    <Breadcrumb>
-      {breadcrumb.map((b, index) => {
-        const Icon = index === 0 ? breadcrumbIcon : FaChevronRight;
+  const Breadcrumbs = useCallback(
+    () => (
+      <Breadcrumb>
+        {breadcrumb.map((b, index) => {
+          const Icon = index === 0 ? breadcrumbIcon : FaChevronRight;
 
-        return (
-          <div
-            key={b?.title}
-            className={
-              index < breadcrumb.length - 1
-                ? 'breadcrumb__item disabled'
-                : 'breadcrumb__item'
-            }
-          >
-            <Icon size={index === 0 ? 25 : 12} />
-            <span
+          return (
+            <div
+              key={b?.title}
               className={
-                b?.url ? 'breadcrumb__text navigate' : 'breadcrumb__text'
+                index < breadcrumb.length - 1
+                  ? 'breadcrumb__item disabled'
+                  : 'breadcrumb__item'
               }
-              onClick={() => handleNavigate(b?.url)}
             >
-              {b?.title}
-            </span>
-          </div>
-        );
-      })}
-    </Breadcrumb>
+              <Icon size={index === 0 ? 25 : 12} />
+              <span
+                className={
+                  b?.url ? 'breadcrumb__text navigate' : 'breadcrumb__text'
+                }
+                onClick={() => handleNavigate(b?.url)}
+              >
+                {b?.title}
+              </span>
+            </div>
+          );
+        })}
+      </Breadcrumb>
+    ),
+    [breadcrumb, breadcrumbIcon, handleNavigate],
   );
 
   useImperativeHandle(ref, () => {

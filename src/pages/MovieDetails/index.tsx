@@ -11,8 +11,6 @@ import { MovieImage, movieImageSrc } from '../../components/MovieImage';
 
 import api from '../../services/api';
 
-import { API_KEY } from '../../config';
-
 import {
   Container,
   Main,
@@ -75,12 +73,7 @@ export const MovieDetails: React.FC<MovieDetailsProps> = () => {
     setLoading(true);
 
     api
-      .get<MovieDetailsProps>(`movie/${id}`, {
-        params: {
-          api_key: API_KEY,
-          language: 'pt-BR',
-        },
-      })
+      .get<MovieDetailsProps>(`movie/${id}`)
       .then(({ status, data }) => {
         if (status === 200) {
           setMovieDetails({
@@ -101,11 +94,15 @@ export const MovieDetails: React.FC<MovieDetailsProps> = () => {
   }, [id, movieDurationFormatted]);
 
   const setRating = useMemo(() => {
-    const result = (movieDetails?.vote_average * 5) / 10;
+    if (!Number.isNaN(movieDetails?.vote_average)) {
+      const result = (movieDetails?.vote_average * 5) / 10;
 
-    if (result < 0) return 0;
+      if (result < 0) return 0;
 
-    return result;
+      return result;
+    }
+
+    return 0;
   }, [movieDetails?.vote_average]);
 
   return (

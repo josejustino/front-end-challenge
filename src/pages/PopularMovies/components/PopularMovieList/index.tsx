@@ -19,12 +19,12 @@ export const PopularMovieList: React.FC<PopularMovieProps> = ({
   popularMovies,
 }) => {
   return (
-    <Container>
+    <Container data-testid="popular-movies-list">
       <h1>Filmes Populares</h1>
       <CardsList>
         {popularMovies.map(popularMovie => {
           return (
-            <Card key={popularMovie.id}>
+            <Card key={popularMovie.id} data-testid="popular-movies-list-card">
               <div className="card-image">
                 <Link to={`/movie-details/${popularMovie.id}`}>
                   <img

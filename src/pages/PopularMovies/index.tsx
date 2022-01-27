@@ -31,7 +31,7 @@ interface PopularMovieProps {
   release_date: string;
 }
 
-interface PopularMovieResponse {
+interface PopularMovieResponseProps {
   results: Array<PopularMovieProps>;
   total_pages: number;
   total_results: number;
@@ -50,7 +50,7 @@ const override = css`
   margin: 1rem auto;
 `;
 
-export const PopularMovies: React.FC<PopularMovieProps> = () => {
+export const PopularMovies: React.FC = () => {
   const headerRef = useRef<HeaderProps>(null);
 
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export const PopularMovies: React.FC<PopularMovieProps> = () => {
       setLoading(true);
 
       api
-        .get<PopularMovieResponse>(`discover/movie`, {
+        .get<PopularMovieResponseProps>(`discover/movie`, {
           params: {
             page,
             with_genres: filters?.genres,
@@ -138,7 +138,7 @@ export const PopularMovies: React.FC<PopularMovieProps> = () => {
   };
 
   return (
-    <>
+    <Container data-testid="popular-movies">
       <Header
         ref={headerRef}
         breadcrumb={[{ title: 'Filmes populares' }]}
@@ -173,30 +173,26 @@ export const PopularMovies: React.FC<PopularMovieProps> = () => {
           </ButtonsFilter>
         </FilterFormContainer>
       </Header>
-      <Container>
-        <Main>
-          <Content id="scrollableDiv">
-            <Section>
-              <PopularMovieList
-                popularMovies={popularMovies}
-                loading={loading}
-              />
-            </Section>
-            {pageNumber * pageSize < totalResults && (
-              <div className="loading__more" ref={paginateRef}>
-                <Loading>
-                  <PacmanLoader
-                    loading={loading}
-                    size={15}
-                    color="#FFFFFF"
-                    css={override}
-                  />
-                </Loading>
-              </div>
-            )}
-          </Content>
-        </Main>
-      </Container>
-    </>
+
+      <Main>
+        <Content id="scrollableDiv">
+          <Section>
+            <PopularMovieList popularMovies={popularMovies} loading={loading} />
+          </Section>
+          {pageNumber * pageSize < totalResults && (
+            <div className="loading__more" ref={paginateRef}>
+              <Loading>
+                <PacmanLoader
+                  loading={loading}
+                  size={15}
+                  color="#FFFFFF"
+                  css={override}
+                />
+              </Loading>
+            </div>
+          )}
+        </Content>
+      </Main>
+    </Container>
   );
 };
