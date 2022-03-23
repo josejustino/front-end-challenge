@@ -9,7 +9,7 @@ import { FaFilm } from 'react-icons/fa';
 import api from '../../services/api';
 
 import { Header } from '../../components/Header';
-import { PopularMovieList } from './components/PopularMovieList';
+import { PopularMovieCard } from './components/PopularMovieCard';
 import { Button } from '../../components/Button';
 import { Genres } from './components/Filters/Genres';
 
@@ -18,6 +18,7 @@ import {
   Main,
   Content,
   Section,
+  MovieList,
   Loading,
   FilterFormContainer,
   FilterFormContent,
@@ -175,9 +176,15 @@ export const PopularMovies: React.FC = () => {
       </Header>
 
       <Main>
-        <Content id="scrollableDiv">
+        <Content>
           <Section>
-            <PopularMovieList popularMovies={popularMovies} loading={loading} />
+            <h1>Filmes Populares</h1>
+
+            <MovieList>
+              {popularMovies.map(movie => {
+                return <PopularMovieCard key={movie.id} movie={movie} />;
+              })}
+            </MovieList>
           </Section>
           {pageNumber * pageSize < totalResults && (
             <div className="loading__more" ref={paginateRef}>

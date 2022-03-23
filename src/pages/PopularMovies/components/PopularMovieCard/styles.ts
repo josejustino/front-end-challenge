@@ -1,25 +1,8 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  & > h1 {
-    margin-left: 0.25rem;
-  }
-`;
-
-export const CardsList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 12.3rem);
-  gap: 1.5rem;
-
-  margin-top: 1.5rem;
-`;
-
-export const Card = styled.div`
+export const MovieCard = styled.div`
   width: 12.3rem;
+  height: 100%;
   box-shadow: 0 2px 8px rgb(0 0 0 / 70%);
   border: 1px solid #4e4a4a;
   border-radius: 10px;

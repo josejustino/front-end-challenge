@@ -1,24 +1,12 @@
 import { screen, render, waitFor } from '@testing-library/react';
 
-import { PopularMovies } from '../../pages/PopularMovies';
-
-import { makeServer } from '../../../miragejs/server';
+import { PopularMovies } from '../../../pages/PopularMovies';
 
 const renderPopularMovies = () => {
   render(<PopularMovies />);
 };
 
 describe('PopularMovies', () => {
-  let server: any;
-
-  beforeEach(() => {
-    server = makeServer({ environment: 'test' });
-  });
-
-  afterEach(() => {
-    server.shutdown();
-  });
-
   it('should render PopularMovies', () => {
     renderPopularMovies();
 
@@ -26,8 +14,6 @@ describe('PopularMovies', () => {
   });
 
   fit('should render PopularMovies component with 10 movies', async () => {
-    server.createList('movie', 10);
-
     renderPopularMovies();
 
     await waitFor(() => {

@@ -28,6 +28,18 @@ export const Section = styled.section`
   width: min(90vw, 1080px);
 `;
 
+export const MovieList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 12.3rem);
+  gap: 1.5rem;
+
+  margin-top: 1.5rem;
+
+  & > h1 {
+    margin-left: 0.25rem;
+  }
+`;
+
 export const Loading = styled.div`
   display: flex;
   flex-direction: row;
